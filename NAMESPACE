@@ -1,0 +1,17 @@
+#exportPattern("^[[:alpha:]]+")
+
+export(cvTest,quantileTest,signTest,var1Test,wspoissonTest,wsrTest,medianTest)
+
+import(exact2x2, exactci, bpcp, ssanv, coin)
+
+importFrom(stats, sd,var, 
+    pt, 
+    pbinom, rbinom, 
+    rgamma, qgamma, pgamma,
+    qchisq, pchisq,
+    quantile, 
+    wilcox.test,
+    uniroot)
+
+S3method(quantileTest,default)
+S3method(quantileTest,ordered)
