@@ -10,9 +10,9 @@ The test is not as important as the confidence intervals, which are often used f
 \usage{
 wspoissonTest(x, w, nullValue = NULL, 
    alternative = c("two.sided", "less", "greater"), 
-   conf.level = 0.95, midp = FALSE, nmc = 10^5,  
+   conf.level = 0.95, midp = FALSE, nmc = 0,  
    wmtype = c("max", "mean", "minmaxavg", "tcz"), 
-   mult = 1, useSeed = TRUE, seed = 104011)
+   mult = 1, unirootTolFactor=10^(-6))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,7 +34,7 @@ confidence level
   \item{midp}{
 logical, should the mid-p confidence distribution method be used}
   \item{nmc}{
-number of Monte Carlo replications, used when midp=TRUE
+Caculation method when midp=TRUE. If nmc=0 (default) does calculations that are very accurate using uniroot. If nmc>0 does Monte Carlo simulations. The Monte Carlo simulations are not needed for general use.
 }
   \item{wmtype}{
 type of modification for the gamma confidence interval, 'max' is the original gamma method that adds \code{max(w)} to \code{sum(x*w)} for the upper interval, 'mean' adds \code{mean(w)}, 'minmaxavg' adds \code{mean(c(min(w),max(w))}, 'tcz' does a modification of Tiwari, Clegg, and Zou (2006). 
@@ -42,11 +42,8 @@ type of modification for the gamma confidence interval, 'max' is the original ga
   \item{mult}{
 a factor to multiply the estimate and confidence intervals by, to give rates per \code{mult}
 }
-  \item{seed}{
-random number seed
-}
-  \item{useSeed}{
-logical, should the seed be set. Ignored unless midp=TRUE. Defaults to TRUE so the when midp=TRUE we have reporducible results.
+\item{unirootTolFactor}{
+tol factor used in uniroot for calculating when midp=TRUE and nmc=0. Value multiplies by a value close to the quantile of interest in confidence interval, so that if the standardized rates are very small (e.g., 0.00001 before using mult) then the uniroot tol will be unirootTolFactor times that.
 }
 }
 \details{
@@ -58,7 +55,7 @@ Since the gamma method is conservative, Tiwari, Clegg, and Zou (2006) proposed a
 
 Ng, Filardo, and Zheng (2008) studied these and other methods (for example, wmtype='minmaxavg') through extensive simulations. They showed that the gamma method (wmtype='max') was the only method that maintained at least nominal  coverage in all the simulations. But that method is conservative. 
 
-Fay (2015) proposed the mid-p confidence distribution method. It appears less conservative, while appearing to retain the nominal coverage in almost all simulations. It is caluclated based on Monte Carlo replications, so when midp=TRUE,  the default is to use set.seed to enforce reproducibility. 
+Fay and Kim (2016) proposed the mid-p gamma method. It appears less conservative, while appearing to retain the nominal coverage in almost all simulations. It is calculated by numeric calculations using uniroot. 
 }
 \value{
 a list of class \code{htest}, containing:
@@ -76,7 +73,7 @@ a list of class \code{htest}, containing:
 Fay and Feuer (1997). "Confidence intervals for directly standardized rates: a method based on the gamma distribution."
  Statistics in Medicine. 16: 791-801.
 
-Fay (2015). "Confidence Intervals for Directly Standardized Rates: A Confidence Distribution Approach." (unpublished manuscript). 
+Fay and Kim (2016). "Confidence Intervals for Weighted Sums of Poisson Random Variables using mid-p Gamma Intervals with Applications to Directly Standardized Rates."(unpublished manuscript). 
 
 Ng, Filardo, and Zheng (2008). "Confidenc interval estimating procedures for standardized incidence rates." Computational Statistics and Data Analysis 52: 3501-3516.
 

@@ -6,6 +6,15 @@
 \newcommand{\CRANpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 %% NB: The date (yyyy-mm-dd) is the "Packaged:" date in ../DESCRIPTION
 
+\section{Version 0.6 (2016-05-04)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Modified \code{wspoissonTest} to be calculated using uniroot by default, instead of by Monte Carlo simulation.
+  }
+ } 
+}
+
+
 \section{Version 0.5 (2015-06-26)}{
    First CRAN release of \pkg{asht}, \dQuote{Applied Statistical Hypothesis Tests} by Michael P. Fay (author, maintainer).
   \subsection{Tests}{

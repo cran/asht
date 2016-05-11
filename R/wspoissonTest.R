@@ -1,17 +1,17 @@
 wspoissonTest<-function(x,w, nullValue=NULL, 
-    alternative = c("two.sided", "less", "greater"), 
-    conf.level = 0.95, 
-    midp=FALSE, nmc=10^5,
-    wmtype=c("max","mean","minmaxavg","tcz"),
-    mult=1,useSeed=TRUE,seed=104011){
-    if (midp & useSeed) set.seed(seed)
+    alternative = c("two.sided", "less", "greater"), conf.level = 0.95, 
+    midp=FALSE,nmc=0,
+    wmtype=c("max","mean","minmaxavg","tcz"),mult=1,unirootTolFactor=10^(-6)){
     alternative<-match.arg(alternative)
-    # for one-sided intervals use either (1-conf.level) or conf.level quantile
-    # for two-sided use (1-conf.level)/2 and   1- (1-conf.level)/2
+    # for one-sided intervals use either (1-conf.level) 
+    # or conf.level quantile
+    # for two-sided use (1-conf.level)/2 and  
+    #                1- (1-conf.level)/2
     # Use alpha and 1-alpha for both types, so use  
     alpha<-1-conf.level
+    if (conf.level<.5) 
+          stop("conf.level must be greater than 0.5")
     if (alternative=="two.sided") alpha<-alpha/2 
-
     # set conf limits to extremes
     lower<-0
     upper<-Inf
@@ -34,13 +34,16 @@ wspoissonTest<-function(x,w, nullValue=NULL,
         ystar<-y+wm
         vstar<-v+wm^2
     } else if (wmtype=="tcz"){
-        ## when midp=FALSE, this gives the Tiwari, Clegg, Zou, 2006 method
+        ## when midp=FALSE, this gives the 
+        ## Tiwari, Clegg, Zou, 2006 method
         ## denoted G4 in Ng, Filardo, and Zheng
         ystar<- y + mean(w)
         vstar<- v + mean(w^2)
     }
 
     if (midp){
+      if (nmc>0){
+      ### Monte Carlo Method
         B<-rbinom(nmc,1,.5)
         if (y>0){  GL<-rgamma(nmc,y^2/v,scale=v/y)
         } else GL<-rep(0,nmc)
@@ -62,7 +65,83 @@ wspoissonTest<-function(x,w, nullValue=NULL,
         } else if (alternative=="greater"){
             ci<-c(quantile(T,probs=alpha),Inf)
         }
-    } else {
+      } else {   # nmc=0
+      #####   Calculate midp Using p and q functions 
+      #####  instead of Monte Carlo
+        Fmid<-function(theta0){
+              0.5*pgamma(theta0,(ystar)^2/(vstar),
+                   scale=(vstar)/(ystar)) +
+                   0.5*pgamma(theta0, y^2/v, scale=v/y)
+        }
+        ## calculate p-values 
+        if (is.null(nullValue)){
+            pAL<-pAG<-NA
+        } else { # nullValue != NULL
+            if (y==0){
+                ## lower CD is point mass at 0
+                pAL<- 0.5*pgamma(nullValue,(ystar)^2/(vstar),
+                  scale=(vstar)/(ystar)) + 0
+                pAG<- 0.5*pgamma(nullValue,(ystar)^2/(vstar),
+                  scale=(vstar)/(ystar),lower.tail=FALSE) + 0
+            } else {   # y>0
+               pAL<- Fmid(nullValue)
+               pAG<- 1- Fmid(nullValue)
+            } # end: y>0
+        } # end: nullValue != NULL
+
+
+        ## Calculate CIs
+            if (y==0){
+                if (alternative=="two.sided"){
+                    ## lower is point mass at zero
+                    ## want q=1-alpha of T=B*TL +(1-B)*TU
+                    ## but TL=0 so .5 of prob at 0
+                    ## so need .5 + .5 qu = q
+                    ## so   qu = (q-.5)/.5
+                    ci<-c(0,qgamma((1-alpha-.5)/.5,
+                           (ystar)^2/(vstar),
+                           scale=(vstar)/(ystar))) 
+                } else if (alternative=="less"){
+                    ## same code as for two sided, 
+                    ## but alpha defined differently
+                    ci<-c(0,qgamma((1-alpha-.5)/.5,
+                           (ystar)^2/(vstar),
+                           scale=(vstar)/(ystar))) 
+                } else if (alternative=="greater"){
+                    ## since alpha<0.5, lower alpha 
+                    ## quantile is all in point mass at 0
+                    ci<-c(0,Inf)
+                }
+            } else {   # y>0
+                qmidp<-function(p){
+                   ## Fmid=.5 F1 + .5 F2
+                   ## works when F1 and F2 are 
+                   ## stochastically ordered
+                   
+
+
+                   rootfunc<-function(Q){
+                       Fmid(Q) - p
+                   }
+                   # the values may be very small, 
+                   # so the tolerance need to be on the 
+                   # correct order
+                   TOL<- qgamma(p, y^2/v, scale=v/y)*unirootTolFactor
+                   uniroot(rootfunc,
+                       c(qgamma(p, y^2/v, scale=v/y),
+                         qgamma(p, ystar^2/vstar,                                                                        
+                         scale=vstar/ystar)),tol=TOL)$root  
+                }
+                if (alternative=="two.sided"){
+                    ci<-c(qmidp(alpha),qmidp(1-alpha))
+                } else if (alternative=="less"){
+                    ci<-c(0,qmidp(1-alpha))
+                } else if (alternative=="greater"){
+                    ci<-c(qmidp(alpha),Inf)
+                }
+            } # end: y>0
+      } # end: nmc=0
+    } else { # midp=FALSE
     # Gamma method of Fay and Feuer, 1997, Stat in Med, 791-801
         if (alternative=="two.sided" | alternative=="greater"){
             # remember alpha<-alpha/2 if alternative='two.sided'
@@ -135,7 +214,15 @@ wspoissonTest<-function(x,w, nullValue=NULL,
 #ntotal<-c(319933,931318,786511,488235,237863,61313)
 
 #set.seed(1031)
-#x<-wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=FALSE)
+#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=TRUE,nmc=10^6)$conf.int
+
+#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=TRUE,nmc=0)$conf.int
+
+
+#wspoissonTest(rep(0,6),10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=TRUE,nmc=10^6)$conf.int
+
+#wspoissonTest(rep(0,6),10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=TRUE,nmc=0)$conf.int
+
 
 #wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=FALSE)
 #wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=FALSE,wmtype="minmaxavg")
