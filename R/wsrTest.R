@@ -1,16 +1,23 @@
 wsrTest <-
 function(x,y=NULL,conf.int=TRUE,conf.level=.95,mu=0,
-    alternative=c("two.sided","less","greater"),
-    digits=NULL){
+    alternative=c("two.sided","less","greater"), 
+    digits=NULL, tieDigits=8){
+  
     if (is.null(y)){
         dname<-paste0("single sample=",deparse(substitute(x)))
-        estName<-"Hodges-Lehmann pseudo-median"
         y<-rep(0,length(x))
     } else {
         dname<-paste0(deparse(substitute(x))," minus ",deparse(substitute(y)))
-        estName<-"Hodges-Lehmann pseudo-median difference"
     }
-    d<-x-y-mu
+    
+    x<-round(x,tieDigits)
+    y<-round(y,tieDigits)
+    # if you use d<- x-y-mu, then the range searched (min(d) to max(d)) 
+    # to look for the CIs is not wide enough
+    # d<-x-y-mu
+    d<-x-y
+    Est<-NA
+    
     alt<-match.arg(alternative)
     if (conf.int){
         ci<-c(-Inf,Inf)
@@ -35,10 +42,32 @@ function(x,y=NULL,conf.int=TRUE,conf.level=.95,mu=0,
         theta<-function(i){
              min(d) + (i/(2^(STEP.POWER+1)))*(max(d)-min(d)) 
         }
+     
+        
+            EstRootFunc<-function(i){
+              ytemp<- round(y+ theta(i),tieDigits)
+              pvalue(wilcoxsign_test(x~ytemp,
+                    zero.method="Pratt",
+                    alternative="less",distribution=exact())) -
+              pvalue(wilcoxsign_test(x~ytemp,
+                    zero.method="Pratt",
+                    alternative="greater",distribution=exact())) 
+            } 
+            irootPos<-uniroot.integer(EstRootFunc,c(0,2^(STEP.POWER+1)),
+                step.power=STEP.POWER,step.up=TRUE,pos.side=TRUE,
+                print.steps=FALSE)$root
+            irootNeg<-uniroot.integer(EstRootFunc,c(0,2^(STEP.POWER+1)),
+                step.power=STEP.POWER,step.up=TRUE,pos.side=FALSE,
+                print.steps=FALSE)$root
+            Est<- 0.5*theta(irootPos) + 0.5*theta(irootNeg)
+            
+ 
+        ## now to root function for CIs
         rootfunc<-function(i,Alt="less"){
-            ytemp<- y+ theta(i)
+            ytemp<- round(y+ theta(i),tieDigits)
             alpha - pvalue(wilcoxsign_test(x~ytemp,zero.method="Pratt",alternative=Alt,distribution=exact()))
         }
+    
         if (alt=="two.sided") alpha<-alpha/2
         if (alt=="greater" | alt=="two.sided"){
             # using the Pratt method, values tied for the lowest 
@@ -88,14 +117,19 @@ function(x,y=NULL,conf.int=TRUE,conf.level=.95,mu=0,
                 ci[2]<-theta(iroot)
             }
         }
+        # round ci to the number of significant digits set by digits argument
+        ci<-round(ci,digits)
+    } else {
+      # conf.int=FALSE
+      ci<-c(NA,NA)
     }
-    out<-wilcoxsign_test(x~y,zero.method="Pratt",alternative=alt,distribution=exact())
     attr(ci,"conf.level")<-conf.level
-    # round ci to the number of significant digits set by digits argument
-    ci<-round(ci,digits)
+    
+    names(Est)<-"median (Hodges-Lehmann estimator)"
+    xstar<- round(x-mu,tieDigits)
+    ystar<- round(y,tieDigits)
+    out<-wilcoxsign_test(xstar~ystar,zero.method="Pratt",alternative=alt,distribution=exact())
     names(mu)<-"median"
-    Est<-wilcox.test(d, exact=FALSE, conf.int = TRUE)$estimate
-    names(Est)<-estName
     S3out<-list(
         statistic=NULL,
         method="Exact Wilcoxon Signed-Rank Test (with Pratt modification if zeros)",

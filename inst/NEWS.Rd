@@ -6,6 +6,35 @@
 \newcommand{\CRANpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 %% NB: The date (yyyy-mm-dd) is the "Packaged:" date in ../DESCRIPTION
 
+\section{Version 0.8 (2017-02-06)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Made changes to the estimate and confidence interval for  \code{wsrTest}. 
+   The default estimate previously used the estimator of the pseudo-median from the difference using 
+   the estimator from \code{wilcox.test}. 
+   The new estimator is based on the shift value where the one-sided p-values are equal. This ensures that the 
+   estimate will be within the confidence interval and will not change as the null hypothesis changes.
+   \item Updated citation for Fay and Kim (2017).
+  }
+ } 
+}
+
+
+
+
+\section{Version 0.7 (2016-11-15)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Corrected error in \code{wsrTest}. The p-value was incorrectly calculated when mu was not 0, now it is correct. Also added the tieDigits option.
+   \item Updated citation for Fay and Kim (2017).
+  }
+ } 
+}
+
+
+
+
+
 \section{Version 0.6 (2016-05-04)}{
  \subsection{Changes}{
   \itemize{

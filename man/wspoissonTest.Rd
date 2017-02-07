@@ -55,7 +55,7 @@ Since the gamma method is conservative, Tiwari, Clegg, and Zou (2006) proposed a
 
 Ng, Filardo, and Zheng (2008) studied these and other methods (for example, wmtype='minmaxavg') through extensive simulations. They showed that the gamma method (wmtype='max') was the only method that maintained at least nominal  coverage in all the simulations. But that method is conservative. 
 
-Fay and Kim (2016) proposed the mid-p gamma method. It appears less conservative, while appearing to retain the nominal coverage in almost all simulations. It is calculated by numeric calculations using uniroot. 
+Fay and Kim (2017) proposed the mid-p gamma method. It appears less conservative, while appearing to retain the nominal coverage in almost all simulations. It is calculated by numeric calculations using uniroot. 
 }
 \value{
 a list of class \code{htest}, containing:
@@ -73,7 +73,8 @@ a list of class \code{htest}, containing:
 Fay and Feuer (1997). "Confidence intervals for directly standardized rates: a method based on the gamma distribution."
  Statistics in Medicine. 16: 791-801.
 
-Fay and Kim (2016). "Confidence Intervals for Weighted Sums of Poisson Random Variables using mid-p Gamma Intervals with Applications to Directly Standardized Rates."(unpublished manuscript). 
+Fay and Kim (2017). "Confidence intervals for directly standardized rates using mid-p gamma intervals." 
+Biometrical Journal. doi:10.1002/bimj.201600111.
 
 Ng, Filardo, and Zheng (2008). "Confidenc interval estimating procedures for standardized incidence rates." Computational Statistics and Data Analysis 52: 3501-3516.
 
