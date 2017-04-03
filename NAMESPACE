@@ -1,6 +1,7 @@
 #exportPattern("^[[:alpha:]]+")
 
-export(cvTest,quantileTest,signTest,var1Test,wspoissonTest,wsrTest,medianTest)
+export(cvTest,quantileTest,signTest,var1Test,wspoissonTest,wsrTest,
+       medianTest, bfTest, pbf, qbf, bfControl)
 
 import(exact2x2, exactci, bpcp, ssanv, coin)
 
@@ -12,6 +13,9 @@ importFrom(stats, sd,var,
     quantile, 
     wilcox.test,
     uniroot)
+ importFrom("stats", "dt", "integrate", "qt", "rt", "setNames", "terms")
 
 S3method(quantileTest,default)
 S3method(quantileTest,ordered)
+S3method(bfTest, default)
+S3method(bfTest, formula)

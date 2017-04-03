@@ -6,6 +6,17 @@
 \newcommand{\CRANpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 %% NB: The date (yyyy-mm-dd) is the "Packaged:" date in ../DESCRIPTION
 
+
+\section{Version 0.9 (2017-04-01)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Created bfTest function to perform the Behrens-Fisher test using the Behrens-Fisher solution with p-values and CIs.  
+  }
+ } 
+}
+
+
+
 \section{Version 0.8 (2017-02-06)}{
  \subsection{Changes}{
   \itemize{
