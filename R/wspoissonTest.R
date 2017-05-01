@@ -2,6 +2,9 @@ wspoissonTest<-function(x,w, nullValue=NULL,
     alternative = c("two.sided", "less", "greater"), conf.level = 0.95, 
     midp=FALSE,nmc=0,
     wmtype=c("max","mean","minmaxavg","tcz"),mult=1,unirootTolFactor=10^(-6)){
+  
+  dname<- paste("x=",deparse(substitute(x)), "and w=", deparse(substitute(w)))
+  
     alternative<-match.arg(alternative)
     # for one-sided intervals use either (1-conf.level) 
     # or conf.level quantile
@@ -55,8 +58,9 @@ wspoissonTest<-function(x,w, nullValue=NULL,
         if (is.null(nullValue)){
             pAL<-pAG<-NA
         } else {
-            pAL<- length(T[T<=nullValue])/nmc
-            pAG<- length(T[T>=nullValue])/nmc
+            # in original, had these switched, fixed now
+            pAG<- length(T[T<=nullValue])/nmc
+            pAL<- length(T[T>=nullValue])/nmc
         }
         if (alternative=="two.sided"){
             ci<-quantile(T,probs=c(alpha,1-alpha))
@@ -78,14 +82,15 @@ wspoissonTest<-function(x,w, nullValue=NULL,
             pAL<-pAG<-NA
         } else { # nullValue != NULL
             if (y==0){
-                ## lower CD is point mass at 0
-                pAL<- 0.5*pgamma(nullValue,(ystar)^2/(vstar),
-                  scale=(vstar)/(ystar)) + 0
+                # in original, had these values switched, fixed now
                 pAG<- 0.5*pgamma(nullValue,(ystar)^2/(vstar),
+                  scale=(vstar)/(ystar)) + 0
+                pAL<- 0.5*pgamma(nullValue,(ystar)^2/(vstar),
                   scale=(vstar)/(ystar),lower.tail=FALSE) + 0
             } else {   # y>0
-               pAL<- Fmid(nullValue)
-               pAG<- 1- Fmid(nullValue)
+               # in original, had these values switched, fixed now
+               pAG<- Fmid(nullValue)
+               pAL<- 1- Fmid(nullValue)
             } # end: y>0
         } # end: nullValue != NULL
 
@@ -198,8 +203,7 @@ wspoissonTest<-function(x,w, nullValue=NULL,
     }
 
 
-    dname<- paste("x=",deparse(substitute(x)), "and w=", deparse(substitute(w)))
-
+ 
     attr(ci, "conf.level") <- conf.level
     rval <- list(statistic = k, parameter = parms, p.value = p.value, 
         conf.int = ci*mult, estimate = y*mult, null.value = nullValue, 
@@ -214,10 +218,15 @@ wspoissonTest<-function(x,w, nullValue=NULL,
 #ntotal<-c(319933,931318,786511,488235,237863,61313)
 
 #set.seed(1031)
-#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=TRUE,nmc=10^6)$conf.int
+#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=173.0817, alternative="less",midp=FALSE)
 
-#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=TRUE,nmc=0)$conf.int
+#xfive<-rep(0,6)
+#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=173.0817,midp=TRUE, alternative="less",nmc=10^4)
+#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=173.0817,midp=TRUE, alternative="less")
+#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=173.0817,midp=FALSE, alternative="less")
 
+
+#wspoissonTest(xfive,10^5*ntotal/(nfive*sum(ntotal)),nullValue=173.0817,midp=TRUE, alternative="greater")
 
 #wspoissonTest(rep(0,6),10^5*ntotal/(nfive*sum(ntotal)),nullValue=170.70168,midp=TRUE,nmc=10^6)$conf.int
 

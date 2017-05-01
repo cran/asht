@@ -7,6 +7,17 @@
 %% NB: The date (yyyy-mm-dd) is the "Packaged:" date in ../DESCRIPTION
 
 
+
+\section{Version 0.9.1 (2017-05-01)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Fixed error in one-sided tests for wspoissonTest when midp=TRUE. Thanks to Michael Nelson for pointing out this error. Also fixed data description for wspoissonTest.
+  }
+ } 
+}
+
+
+
 \section{Version 0.9 (2017-04-01)}{
  \subsection{Changes}{
   \itemize{
