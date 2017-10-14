@@ -8,6 +8,25 @@
 
 
 
+\section{Version 0.9.3 (2017-10-06)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Added wmwTest to calculate the Wilcoxon-Mann-Whitney test with confidence intervals for the Mann-Whitney parameter that are unified with the test.
+  }
+ } 
+}
+
+
+\section{Version 0.9.2 (2017-08-10)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Added the abcnonHtest function to give nonparametric ABC (approximate bootstrap confidence) intervals with p-values and estimates.
+  }
+ } 
+}
+
+
+
 \section{Version 0.9.1 (2017-05-01)}{
  \subsection{Changes}{
   \itemize{

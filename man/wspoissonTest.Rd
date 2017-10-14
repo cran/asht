@@ -74,7 +74,7 @@ Fay and Feuer (1997). "Confidence intervals for directly standardized rates: a m
  Statistics in Medicine. 16: 791-801.
 
 Fay and Kim (2017). "Confidence intervals for directly standardized rates using mid-p gamma intervals." 
-Biometrical Journal. doi:10.1002/bimj.201600111.
+Biometrical Journal. 59(2): 377-387.
 
 Ng, Filardo, and Zheng (2008). "Confidenc interval estimating procedures for standardized incidence rates." Computational Statistics and Data Analysis 52: 3501-3516.
 
