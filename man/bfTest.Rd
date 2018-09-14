@@ -59,11 +59,15 @@ bfTest(x, \dots)
 \value{
   A list with class \code{"htest"} containing the following components:
   \item{statistic}{the value of the t-statistic.}
-  \item{parameter}{NA}
-  \item{p.value}{the p-value for the test.}
-  \item{conf.int}{a confidence interval for the mean appropriate to the
+  \item{parameter}{R = \code{atan(SEMx/SEMy)} used in Behrens-Fisher distribution,
+  where SEMx=std error of the mean of x, see \code{\link{pbf}}, but not used in calculation for this function
+}
+\item{p.value}{the p-value for the test.}
+  \item{conf.int}{a confidence interval for the difference in means 
+    (mean.x-mean.y) 
+    appropriate to the
     specified alternative hypothesis.}
-  \item{estimate}{the estimated difference in means}
+  \item{estimate}{the estimated means}
   \item{null.value}{the specified hypothesized value of the mean
     difference}
   \item{alternative}{a character string describing the alternative

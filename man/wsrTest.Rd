@@ -5,7 +5,7 @@
 Exact Wilcoxon Signed Rank Test
 }
 \description{
-Calculates the exact Wilcoxon signed rank test (using Pratt's method if there are zero values). Gives exact matching confidence intervals based on repeated calls to \code{\link[coin]{wilcoxsign_test}}, and gives associated Hodges-Lehmann estimator of center of the symmetric distribution of the difference.
+Calculates the exact Wilcoxon signed rank test (using Pratt's method if there are zero values). Gives exact matching confidence intervals based on repeated calls to \code{\link{wilcoxsign_test}}, and gives associated Hodges-Lehmann estimator of center of the symmetric distribution of the difference.
 }
 \usage{
 wsrTest(x, y = NULL, conf.int = TRUE, conf.level = 0.95, 
@@ -44,7 +44,7 @@ The Wilcoxon signed rank test tests the null hypothesis of
 whether a set of values (x values, if y=NULL)
 or differences (x-y, if y!=NULL) are symmetric about \code{mu}. 
 
-This function calculates the exact Wilcoxon signed rank test using the Pratt method if there are zeros. In other words, rank the differences equal to zero together with the absolute value of the differences, but then permute the signs of only the non-zero ranks. The p-values are calculated using \code{\link[coin]{wilcoxsign_test}}, this function is just a wrapper to get confidence intervals.
+This function calculates the exact Wilcoxon signed rank test using the Pratt method if there are zeros. In other words, rank the differences equal to zero together with the absolute value of the differences, but then permute the signs of only the non-zero ranks. The p-values are calculated using \code{\link{wilcoxsign_test}}, this function is just a wrapper to get confidence intervals.
 
 
 When \code{conf.int=TRUE}, we get an estimator of the center of the symmetric distribution of the differences
@@ -84,7 +84,7 @@ The estimator and confidence interval here are different than the ones used in \
 %% ~Make other sections like Warning  \section{Warning }{....} ~
 
 \seealso{
-\code{\link[coin]{wilcoxsign_test}}
+\code{\link{wilcoxsign_test}}
 }
 \examples{
 wsrTest((-3:8))

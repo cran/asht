@@ -66,10 +66,16 @@ latent continuous parameters? (see details)}
 \details{
 The function \code{wmwTest} evaluates the Wilcoxon-Mann-Whitney test (also called the Mann-Whitney U test or the Wilcoxon rank sum test). The WMW test is a permutation two-sample rank test, and the test may be evaluated under many different sets of assumptions (Fay and Proschan, 2010). The least restrictive set of assumptions tests the null hypothesis that the two distributions of the two samples are equal versus the alternative that they are different. Unfortunately, with only those assumptions, we cannot get confidence intervals on the Mann-Whitney parameter, phi= Pr[ X<Y] + 0.5 Pr[X=Y]. In order to get confidence intervals on phi, we need additional assumptions, and for this function we use the proportional odds assumption. This assumption can be interpreted as saying that there exists some unknown monotonic transformation of the responses that leads to a location shift in a logistic distribution. This can work for discrete data (i.e., with ties allowed) if we interpret discrete responses as a grouping of some underlying latent continuous response. The proportional odds assumption is less restrictive that the assumption used in \code{wilcox.test}, which assumes a location shift on the unknown continuous distribution of the untransformed data. 
 
-In summary, the two-sided p-value can be interpreted as testing the null that the two distributions are equal, and the confidence intervals on the Mann-Whitney parameter are intrepreted under the proportional odds assumption.
+
+In summary, the two-sided p-value can be interpreted as testing the null that the two 
+distributions are equal, and the confidence intervals on the Mann-Whitney parameter 
+are intrepreted under the proportional odds assumption.
+In general the confidence intervals are compatible with the associated p-values,
+for details see Fay and Malinovsky (2018).
 
 There is a choice of three methods. When \code{method='asymptotic'}, the test is implemented using a normal approximation, with (\code{correct=TRUE}) or without 
-(\code{correct=FALSE}) a continuity correction. The resulting p-values should match \code{\link{wilcox.test}} (when 
+(\code{correct=FALSE}) a continuity correction. The resulting p-values should 
+match \code{\link{wilcox.test}} (when 
 \code{paired=FALSE}  and \code{exact=FALSE}). When \code{method='exact.ce'}, the test is implemented using complete enumeration of all permutations, and hence is only tractible for very small sample sizes (less than 10 in each group). When \code{method='exact.mc'}, the test is implemented using Monte Carlo with B=10^4 replications (change B with \code{control=controlWMW(nMC=B)}). As B gets larger the p-value approaches the exact one.     
 
 The  \code{tsmethod='central'} gives two-sided p-value that is equal to 
@@ -109,6 +115,8 @@ When the data are discrete, we can treat the data as if they are a grouping of s
 
 }
 \references{
+Fay, MP and Malinovsky, Y (2018). Confidence Intervals of the Mann-Whitney Parameter that are Compatible with the Wilcoxon-Mann-Whitney Test. Statistics in Medicine:
+DOI: 10.1002/sim.7890.
 
 Fay, MP and Proschan MA (2010). Wilcoxon-Mann-Whitney of t-test? On assumptions for hypothesis tests and multiple interpretations of decision rules. Statistics Surveys 4:1-39.
 
@@ -125,9 +133,9 @@ increase \code{control=wmwControl(rcheckgrid)}
 and \code{control=wmwControl(ncheckgrid)}
 } 
 \seealso{
-See \code{\link{wilcox.test}} for either exact p-value or the same asymptotic p-value and confidence interval on location shift. 
+See \code{\link{wilcox.test}} for either exact p-value or the same asymptotic p-value and confidence interval on location shift under the shift assumption. 
 
-See \code{\link[coin]{wilcox_test}} for exact p-value and exact confidence interval on location shift.
+See \code{\link{wilcox_test}} for exact p-value and exact confidence interval on location shift.
 }
 \examples{
 # data from Table 1 of Hanley and McNeil (also given in Table 1 of Newcombe, 2006)

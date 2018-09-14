@@ -114,7 +114,7 @@ bfTest.default<-function(x, y,
   if (!missing(conf.level) && (length(conf.level) != 1 || !is.finite(conf.level) || 
                                conf.level < 0 || conf.level > 1)) 
     stop("'conf.level' must be a single number between 0 and 1")
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+  dname <- paste0("x=",deparse(substitute(x)), "and y=", deparse(substitute(y)))
   ## t.test.default only tests on non-missing data, do the same
   yok <- !is.na(y)
   y <- y[yok]
@@ -132,6 +132,8 @@ bfTest.default<-function(x, y,
   u1<-mean(y)
   s1<-sqrt(var(y))
   n1<-length(y)
+  Rval<- atan((s2/sqrt(n2))/(s1/sqrt(n1)))  
+
   if (n1<2 | n2<2) stop("n1 and n2 must be at least 2")
   stderr<- sqrt(s1^2/n1 + s2^2/n2 )
   
@@ -174,6 +176,7 @@ bfTest.default<-function(x, y,
   
   tstat <- (u2 - u1 - mu)/stderr
   df<-NA
+  names(Rval)<-"R"
   estimate <- c(u2, u1)
   names(estimate) <- c("mean of x", "mean of y")
   
@@ -187,7 +190,7 @@ bfTest.default<-function(x, y,
     method<-paste(method,"(Monte Carlo implementation, nmc=",nsim,")")
   }
   
-  rval <- list(statistic = tstat, parameter = df, p.value = pval, 
+  rval <- list(statistic = tstat, parameter = Rval, p.value = pval, 
                conf.int = CI, estimate = estimate, null.value = mu, 
                alternative = alternative, method = method, data.name = dname)
   class(rval) <- "htest"

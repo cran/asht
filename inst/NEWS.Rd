@@ -7,6 +7,23 @@
 %% NB: The date (yyyy-mm-dd) is the "Packaged:" date in ../DESCRIPTION
 
 
+\section{Version 0.9.4 (2018-09-14)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Added meldtTest and meldCD functions to do two-sample tests by melding.
+   \item Added tukeyWelsch function to do multiplicity adjusted pairwise tests from k-samples
+   \item Added anovaOneWay, to output an ICC or other estimate, also allow var.eqaul=FALSE using the Brown-Forsythe method.
+   \item Added ama1c1cpg data set.
+   \item Fixed wmwTest when exact and there are tied values and value is most extreme. 
+   For example,  wmwTest(c(1,3),c(3,4))  previously had given an error for calculating 
+   the confidence interval. 
+   \item use match.arg with method in wmwTest, so that method='asy' will work for method='asymptotic'
+   \item updated wmwTest reference
+   \item added output to bfTest so it outputs the R statistic.
+  }
+ } 
+}
+
 
 \section{Version 0.9.3 (2017-10-06)}{
  \subsection{Changes}{

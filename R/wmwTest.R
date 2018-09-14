@@ -48,6 +48,10 @@ wmwTestExact<-function(x,y, alternative=c("two.sided","less","greater"),
   Phimidobs<- (1/(m*n))*( sum(zobs*rank(u)) - (n*(n+1))/2) 
   Phimid<-round(Phimid,digits)
   Phimidobs<-round(Phimidobs,digits)
+  # changes with Version 0.9.4, need PhiMin and PhiMax
+  # for bounds when there is ties
+  PhiMin<- min(Phimid)
+  PhiMax<- max(Phimid)
   
   sumlog<-function(x){ sum( log(x) ) }
   
@@ -102,10 +106,12 @@ wmwTestExact<-function(x,y, alternative=c("two.sided","less","greater"),
     alpha<- 1-conf.level
     if (alternative=="two.sided" & tsmethod=="central"){ alpha<- alpha/2 }
     ci<-c(0,1)
-    if ((alternative=="less" | (alternative=="two.sided" & tsmethod=="central")) & Phimidobs<1){
+    # changes with Version 0.9.4 change Phimidobs<1 to Phimidobs< PhiMax
+    if ((alternative=="less" | (alternative=="two.sided" & tsmethod=="central")) & Phimidobs<PhiMax){
       ci[2]<- uniroot(rootfunc,c(eps,1-eps),tol=eps,Alpha=alpha, Alternative="less")$root
     } 
-    if ((alternative=="greater" | (alternative=="two.sided" & tsmethod=="central")) & Phimidobs>0){
+    # changes with Version 0.9.4 change Phimidobs>0 to Phimidobs> PhiMin
+    if ((alternative=="greater" | (alternative=="two.sided" & tsmethod=="central")) & Phimidobs>PhiMin){
       ci[1]<- uniroot(rootfunc,c(eps,1-eps),tol=eps,Alpha=alpha, Alternative="greater")$root
     } 
     if (alternative=="two.sided" & tsmethod=="abs"){
@@ -195,6 +201,9 @@ wmwTestExact<-function(x,y, alternative=c("two.sided","less","greater"),
 
   list(p.value=p.value,estimate=Phimidobs,conf.int=ci, METHOD=METHOD)
 }
+
+
+
 
 
 #set.seed(13)
@@ -571,6 +580,8 @@ wmwTest.default <-
     if (is.null(method)){
       method<-methodRule(x,y,exact)
     }
+    # use match.arg so that if method="asy" it will work
+    method<-match.arg(method,c("asymptotic","exact.ce","exact.mc"))
     if (method=="asymptotic"){
       wout<-wmwTestAsymptotic(x,y, phiNull, conf.level, alternative,
                          correct, epsilon=control$epsilon,
