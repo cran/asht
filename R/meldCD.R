@@ -13,7 +13,13 @@ meldCD <-
            parmGrid = NULL,
            nmc = 1e5,
            ngrid = 1e4,
-           calcmethod = "int", epsilon=1e-8) {
+           calcmethod = "int", epsilon=1e-8, utol=1e-8) {
+    
+    ## CHANGES TO MAKE: Look into default parmGrid when using difference in Poisson rates
+    ##      where the rates are very small, say 1e-4.
+    ##      Look at the way I defined parmGrid in 
+    #       /PUBLISHED/2015 Fay Proschan Brittain/R/poisson2sampleDiff/poisson2sampleDiff.R 
+    
     alternative <- match.arg(alternative)
     parmtype <- match.arg(parmtype)
     estimate <- match.arg(estimate)
@@ -216,13 +222,13 @@ meldCD <-
       
       if (estimate == "median") {
         if (-sign(root1(min(parmGrid)))+sign(root1(max(parmGrid)))==2){
-          est1 <-  uniroot(root1, interval = range(parmGrid), q = 0.5)$root
+          est1 <-  uniroot(root1, interval = range(parmGrid), q = 0.5, tol=utol)$root
        } else {
           warning("cannot calculate median of H1")
           est1<-NA
         }
         if (-sign(root2(min(parmGrid)))+sign(root2(max(parmGrid)))==2){
-          est2 <-  uniroot(root2, interval = range(parmGrid), q = 0.5)$root
+          est2 <-  uniroot(root2, interval = range(parmGrid), q = 0.5, tol=utol)$root
         } else {
           if (H2(min(parmGrid))==0.5){
             warning("median of CD for group 2 may not be unique, set to minimum parmGrid value")
@@ -246,21 +252,21 @@ meldCD <-
       GLIM<-c(g(max(xmid),min(xmid)),g(min(xmid),max(xmid)))
       
       if (alternative == "two.sided") {
-        cilo <-  uniroot(rootg, interval = GLIM, q = alpha / 2)$root
+        cilo <-  uniroot(rootg, interval = GLIM, q = alpha / 2, tol=utol)$root
         cihi <-
           uniroot(rootg,
                   interval = GLIM,
-                  q = 1 - alpha / 2)$root
+                  q = 1 - alpha / 2, tol=utol)$root
         ci <- c(cilo, cihi)
         p.value <- min(1, 2 * min(pless, pgr))
       } else if (alternative == "less") {
         cihi <- uniroot(rootg,
                         interval = GLIM,
-                        q = 1 - alpha)$root
+                        q = 1 - alpha, tol=utol)$root
         ci <- c(glim[1], cihi)
         p.value <- pless
       }   else if (alternative == "greater") {
-        cilo <- uniroot(rootg, interval = GLIM, q = alpha)$root
+        cilo <- uniroot(rootg, interval = GLIM, q = alpha, tol=utol)$root
         ci <- c(cilo, glim[2])
         p.value <- pgr
       }

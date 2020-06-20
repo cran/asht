@@ -11,7 +11,7 @@ Melding is a very general way of combining two independent confidence interval p
 meldCD(H1, H2, nullparm = NULL, parmtype = c("difference", "ratio", "oddsratio"), 
     conf.level = 0.95, alternative = c("two.sided", "less", "greater"), 
     estimate = c("median", "mean"), lim = c(-Inf, Inf), parmGrid = NULL,
-    nmc = 1e5, ngrid = 1e4, calcmethod = "int", epsilon=1e-8)
+    nmc = 1e5, ngrid = 1e4, calcmethod = "int", epsilon=1e-8, utol=1e-8)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -51,6 +51,7 @@ minimum number of elements in the parameter grid, used if parmGrid=NULL
 calculation method, either 'int' (numeric integration) or 'mc' (Monte Carlo)
 }
 \item{epsilon}{small value for warning check, we want the minimum of the CD over the parameter grid to be greater than epsilon, and the maximum to be less than 1-epsilon}
+\item{utol}{small value for passing to tol option in uniroot for confidence interval calculations}
 }
 \details{
 For continuous responses, a confidence distribution (CD) is like a frequentist posterior distribution. 
