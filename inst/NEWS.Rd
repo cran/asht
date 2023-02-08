@@ -19,6 +19,14 @@
 
 
 
+\section{Version 1.0.0 (2023-02-06)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Added WprevSeSp function.
+  }
+ } 
+}
+
 \section{Version 0.9.8 (2021-09-15)}{
  \subsection{Changes}{
   \itemize{

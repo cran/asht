@@ -1,5 +1,6 @@
-61aec82e1a0d172b70d1139ddd80d934 *DESCRIPTION
-30f9f8ab53cd6f42abad57e96b9741e3 *NAMESPACE
+fdded0f3596d6797f0fd413c9e9e169c *DESCRIPTION
+c89a0b4fbb75bdbf27a48b03bf22cc09 *NAMESPACE
+8011e7b296cba20c84215f7aade5e721 *R/WprevSeSp.R
 56644470b40a9742c0922039e641ca62 *R/abcnonHtest.R
 923a1af6d88140ef2ef9e8fc7adb4752 *R/anovaOneWay.R
 68079fc35b1892d1eeae2e3924609350 *R/bfTest.R
@@ -17,8 +18,9 @@ fd29c60ae46915eba59c7df2b9727d69 *R/var1Test.R
 10bf26f4b9e006dd7e8369b2ed6d44d3 *R/wspoissonTest.R
 2d5a645a6dc2c48f121fdb59799b580d *R/wsrTest.R
 945105acc8a05f9921d565bdfbb1cd57 *data/ama1c1cpg.rda
-609bd230ff1034bc0331f1fb21958dc8 *inst/NEWS.Rd
+24493b07eddb2b222b8d2c54205ebf54 *inst/NEWS.Rd
 efc3e0cdc42f9b5977169165f2144733 *man/Vpo.Rd
+d4cb74ef372dccc188e0f3324b6a95e0 *man/WprevSeSp.Rd
 09f752991d3946aabd291e7f3b1cda65 *man/abcnonHtest.Rd
 68432d8d838c5bdb04f2279a6ce8d715 *man/ama1c1cpg.Rd
 10d0a30981dd3fca8aedb9b167b94351 *man/anovaOneWay.Rd
