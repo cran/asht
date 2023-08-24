@@ -19,6 +19,14 @@
 
 
 
+\section{Version 1.0.1 (2023-08-24)}{
+ \subsection{Changes}{
+  \itemize{
+   \item Fixed asht-package.Rd file.
+  }
+ } 
+}
+
 \section{Version 1.0.0 (2023-02-06)}{
  \subsection{Changes}{
   \itemize{

@@ -9,13 +9,6 @@ Applied Statistical Hypothesis Tests
 Test and confidence intervals for some applied statistical hypothesis tests.
 }
 \details{
-\tabular{ll}{
-Package: \tab asht\cr
-Type: \tab Package\cr
-Version: \tab 0.9.8\cr
-Date: \tab 2022-09-15\cr
-License: \tab GPL-3\cr
-}
 A collection of statistical hypothesis tests, with a focus on non-asymptotic tests. Some tests are \code{\link{medianTest}} for exact tests and
 confidence intervals about a median, \code{\link{quantileTest}} which generalizes \code{\link{medianTest}} for other quantiles besides the median,  \code{\link{signTest}} to run the exact sign test, \code{\link{bfTest}} to run the Behrens-Fisher test,
 \code{\link{abcnonHtest}} to calculate ABC intervals and tests,
